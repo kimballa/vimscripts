@@ -100,9 +100,9 @@ nnoremap <silent> <buffer> <leader>E :AddEquals<cr>
 fun! <SID>StripTrailingWhitespaces()
     let l = line(".")
     let c = col(".")
-    let _s = @
+    let _s = @/
     %s/\s\+$//e
-    let @ = _s
+    let @/ = _s
     call cursor(l, c)
 endfun
 
