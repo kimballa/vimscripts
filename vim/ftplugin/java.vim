@@ -107,4 +107,7 @@ fun! <SID>StripTrailingWhitespaces()
 endfun
 
 autocmd BufWritePre *.java :call <SID>StripTrailingWhitespaces()
+autocmd BufWritePre *.java :JavaImportClean
+autocmd BufWritePre *.java :JavaImportSort
+
 
