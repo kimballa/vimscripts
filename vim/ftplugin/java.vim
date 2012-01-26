@@ -21,6 +21,15 @@ nnoremap <silent> <buffer> <leader>s :JavaSet<cr>
 """ These assume eclim is available.
 
 
+" cleanup and organize imports.
+function! aaron:cleanAndOrganizeImports()
+ execute 'JavaImportClean'
+ execute 'JavaImportSort'
+endfunction
+
+command! -nargs=0 -bar CleanAndOrganizeImports call aaron:cleanAndOrganizeImports()
+nnoremap <silent> <buffer> <leader>J :CleanAndOrganizeImports<cr>
+
 " Add a slf4j logger to the current class.
 function! aaron:addlogger()
 
@@ -97,17 +106,6 @@ command! -nargs=0 -bar AddEquals call aaron:addequals()
 nnoremap <silent> <buffer> <leader>E :AddEquals<cr>
 
 " Strip trailing whitespace when you save a file.
-fun! <SID>StripTrailingWhitespaces()
-    let l = line(".")
-    let c = col(".")
-    let _s = @/
-    %s/\s\+$//e
-    let @/ = _s
-    call cursor(l, c)
-endfun
-
-autocmd BufWritePre *.java :call <SID>StripTrailingWhitespaces()
-autocmd BufWritePre *.java :JavaImportClean
-autocmd BufWritePre *.java :JavaImportSort
+autocmd BufWritePre *.java :call aaron:StripTrailingWhitespaces()
 
 
