@@ -23,8 +23,10 @@ nnoremap <silent> <buffer> <leader>s :JavaSet<cr>
 
 " cleanup and organize imports.
 function! aaron:cleanAndOrganizeImports()
+ execute 'set noignorecase'
  execute 'JavaImportClean'
  execute 'JavaImportSort'
+ execute 'set ignorecase'
 endfunction
 
 command! -nargs=0 -bar CleanAndOrganizeImports call aaron:cleanAndOrganizeImports()
