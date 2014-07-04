@@ -42,7 +42,8 @@ let curGitRoot = substitute(curGitRoot, "[\\s]\\+$", "", "g")
 let curGitRoot = substitute(curGitRoot, "\\n", "", "g")
 let curGitRoot = substitute(curGitRoot, "\\r", "", "g")
 
-let fullTagList = strlen(curGitRoot) ? system("cat " . curGitRoot . "/.taglist") :
+let fullTagList = strlen(curGitRoot) ? curGitRoot . "/tags\\ " .
+    \ system("cat " . curGitRoot . "/.taglist") . "\\ ~/src/tags" :
     \ "~/src/git/tags\\ ~/src/tags"
 " 'set tags' will tokenize the spaces properly only if we use 'set'.
 " Simply doing 'let &tags=...' won't properly pick up multiple tags
