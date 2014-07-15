@@ -44,8 +44,8 @@ function! aaron:addlogger()
   let classname = substitute(filename, "^.*/", "", "g")
 
   " Ensure that the appropriate classes are imported.
-  call eclim#java#import#InsertImports(['org.slf4j.Logger'])
-  call eclim#java#import#InsertImports(['org.slf4j.LoggerFactory'])
+  call eclim#java#import#Import('org.slf4j.Logger')
+  call eclim#java#import#Import('org.slf4j.LoggerFactory')
 
   " Move to the line immediately following the class definition.
   execute '1'
