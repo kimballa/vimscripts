@@ -117,13 +117,14 @@ nnoremap <silent> <buffer> <leader>E :AddEquals<cr>
 " Strip trailing whitespace when you save a file.
 autocmd BufWritePre *.java :call aaron:StripTrailingWhitespaces()
 
-
-" In Java source files, show the tag under the current cursor after 4 seconds.
-au! CursorHold *.java nested exe "silent! ptag " . expand("<cword>") 
-" ... or if the user types \]
+" In Java source files, show the tag under the current cursor if the user types \]
 fun! aaron:ShowCurrentTagSignature()
   execute "silent! ptag " . expand("<cword>")
 endfun
 command! -nargs=0 -bar Signature call aaron:ShowCurrentTagSignature()
 nnoremap <silent> <leader>] :Signature<CR>
+
+" ... or activate it if the user idles the cursor for 4 seconds.
+"au! CursorHold *.java nested exe "silent! ptag " . expand("<cword>")
+
 

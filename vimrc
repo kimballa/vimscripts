@@ -191,4 +191,22 @@ let g:EclimMavenPomClasspathUpdate=0
 " Set the preview window to be tiny by default.
 set previewheight=2
 
+" Enable AutoComplPop for popup autocomplete and integrate w/ Eclim's completer function.
+" (see http://eclim.org/vim/code_completion.html)
+let g:acp_enableAtStartup=1
+let g:acp_completeoptPreview=1
+
+let g:acp_behaviorJavaEclimLength = 3
+function MeetsForJavaEclim(context)
+  return g:acp_behaviorJavaEclimLength >= 0 &&
+        \ a:context =~ '\k\.\k\{' . g:acp_behaviorJavaEclimLength . ',}$'
+endfunction
+let g:acp_behavior = {
+    \ 'java': [{
+      \ 'command': "\<c-x>\<c-u>",
+      \ 'completefunc' : 'eclim#java#complete#CodeComplete',
+      \ 'meets'        : 'MeetsForJavaEclim',
+    \ }]
+  \ }
+
 
