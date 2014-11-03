@@ -19,6 +19,28 @@ set hlsearch
 set ignorecase
 set smartcase
 
+" Use these commands if you want the 'j' and 'k' keys to move one screen line instead
+" of one <CR>-delimited line at a time.
+" :nmap j gj
+" :nmap k gk
+
+" Cycle between open buffers
+:nmap <C-n> :bnext<CR>
+:nmap <C-p> :bprev<CR>
+" List buffers
+:nmap <C-b> :BuffersToggle<CR>
+
+" Start Pathogen for module loading. Modules live in ~/.vim/bundle/
+" https://github.com/tpope/vim-pathogen
+execute pathogen#infect()
+
+" Autoclose XML and HTML tags in .xml and .html documents:
+" Use CTRL+SHIFT+_ to close it.
+au Filetype html,xml,xsl source ~/.vim/plugin/closetag.vim
+" In HTML documents, use html-style tag closing by setting a var and reloading:
+au Filetype html let b:closetag_html_style=1
+au Filetype html source ~/.vim/plugin/closetag.vim
+
 au BufRead,BufNewFile *.scala set filetype=scala
 au BufRead,BufNewFile *.scala set syntax=scala
 
@@ -102,10 +124,40 @@ nnoremap <silent> + :tnext<CR>
 nnoremap <silent> _ :tprev<CR>
 
 " set '\o' to run :only
-nnoremap <silent> <Leader>o :only<CR>
+"nnoremap <silent> <Leader>o :only<CR>
+
+" just kidding, set it to toggle paste mode.
+nnoremap <silent> <Leader>o :set paste!<CR>
 
 " I never use the 'single-char-replace' function anyway.
 nnoremap <silent> r :redo<CR>
+
+" Define a function to count the number of active buffers.
+function! NumBufs()
+    let i = bufnr('$')
+    let j = 0
+    while i >= 1
+        if buflisted(i)
+            let j+=1
+        endif
+        let i-=1
+    endwhile
+    return j
+endfunction
+
+" A function that will close vim if this is the only visible buffer.
+function! aaron:CloseIfOnlyErrorBuffer()
+  let num_windows=winnr('$')
+  if (NumBufs() == 2 && num_windows == 1)
+    " All we have is the source file and this error buffer,
+    " and the source file is hidden (":q"'d away). Destroy this buffer then attempt to quit
+    " the rest. Break if our file is somehow dirty.
+    execute "bd"
+    execute "qa"
+  endif
+endfunction
+command! -nargs=0 -bar DoNotSaveAndCloseOnlyBuffer call aaron:CloseIfOnlyErrorBuffer()
+
 
 " Open the error-messages window and go to the error message associated
 " with the current line.
@@ -114,6 +166,8 @@ function! aaron:pop_current_error()
   let cur_line_no = line(".")
   execute "lopen"
   execute "silent! /" . cur_file_name . "|" . cur_line_no . " "
+  " Register an entry hook such that if this is the only visible buffer, close vim.
+  au BufEnter <buffer> DoNotSaveAndCloseOnlyBuffer
 endfunction
 command! -nargs=0 -bar PopCurError call aaron:pop_current_error()
 nnoremap <silent> <leader>e :PopCurError<CR>
@@ -127,5 +181,14 @@ fun! aaron:StripTrailingWhitespaces()
     call cursor(l, c)
 endfun
 command! -nargs=0 -bar Strip call aaron:StripTrailingWhitespaces()
+
+
+" Disable Eclim XML validation; we never have XSL files handy.
+let g:EclimXmlValidate=0
+" And for similar reasons, do not update the classpath; user should mvn eclipse:eclipse anyway.
+let g:EclimMavenPomClasspathUpdate=0
+
+" Set the preview window to be tiny by default.
+set previewheight=2
 
 
