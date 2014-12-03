@@ -127,4 +127,23 @@ nnoremap <silent> <leader>] :Signature<CR>
 " ... or activate it if the user idles the cursor for 4 seconds.
 "au! CursorHold *.java nested exe "silent! ptag " . expand("<cword>")
 
+" Enable AutoComplPop for popup autocomplete and integrate w/ Eclim's completer function.
+" (see http://eclim.org/vim/code_completion.html)
+let g:acp_enableAtStartup=0 " Actually, leave this disabled for now.. it has icky bugs.
+let g:acp_completeoptPreview=1
+
+let g:acp_behaviorJavaEclimLength = 3
+function! MeetsForJavaEclim(context)
+  return g:acp_behaviorJavaEclimLength >= 0 &&
+        \ a:context =~ '\k\.\k\{' . g:acp_behaviorJavaEclimLength . ',}$'
+endfunction
+let g:acp_behavior = {
+    \ 'java': [{
+      \ 'command': "\<c-x>\<c-u>",
+      \ 'completefunc' : 'eclim#java#complete#CodeComplete',
+      \ 'meets'        : 'MeetsForJavaEclim',
+    \ }]
+  \ }
+
+"execute 'AcpEnable'
 
