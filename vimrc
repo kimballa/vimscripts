@@ -85,18 +85,18 @@ nnoremap <silent> <F8> :ProjectTree<CR>
 nnoremap <silent> <F9> :TlistToggle<CR>
 
 " Functions for making the screen doublewidth or normalwidth
-function! aaron:doublewide()
+function! AaronDoublewide()
   " 2 100-column windows plus the vertical spacer
   let &columns = 201
 endfunction
 
-function! aaron:normalwide()
+function! AaronNormalwide()
   let &columns = 100
 endfunction
 
 " set to double width, and :vsp the file
-function! aaron:doublevsplit(...)
-  call aaron:doublewide()
+function! AaronDoublevsplit(...)
+  call AaronDoublewide()
   if a:0 > 0
     execute "vsplit " . a:1
   else
@@ -105,16 +105,16 @@ function! aaron:doublevsplit(...)
 endfunction
 
 " Function for turning on "serious mode"
-function! aaron:serioushackmode()
+function! AaronSerioushackmode()
   let &columns = 132
   execute "ProjectTree"
   execute "TlistOpen"
 endfunction
 
-command! -nargs=0 -bar DoubleWidth call aaron:doublewide()
-command! -nargs=0 -bar NormalWidth call aaron:normalwide()
-command! -nargs=? -complete=file VSP call aaron:doublevsplit("<args>")
-command! -nargs=0 -bar HackMode call aaron:serioushackmode()
+command! -nargs=0 -bar DoubleWidth call AaronDoublewide()
+command! -nargs=0 -bar NormalWidth call AaronNormalwide()
+command! -nargs=? -complete=file VSP call AaronDoublevsplit("<args>")
+command! -nargs=0 -bar HackMode call AaronSerioushackmode()
 
 " engage hackmode with F4
 nnoremap <silent> <F4> :HackMode<CR>
@@ -146,7 +146,7 @@ function! NumBufs()
 endfunction
 
 " A function that will close vim if this is the only visible buffer.
-function! aaron:CloseIfOnlyErrorBuffer()
+function! AaronCloseIfOnlyErrorBuffer()
   let num_windows=winnr('$')
   if (NumBufs() == 2 && num_windows == 1)
     " All we have is the source file and this error buffer,
@@ -156,12 +156,12 @@ function! aaron:CloseIfOnlyErrorBuffer()
     execute "qa"
   endif
 endfunction
-command! -nargs=0 -bar DoNotSaveAndCloseOnlyBuffer call aaron:CloseIfOnlyErrorBuffer()
+command! -nargs=0 -bar DoNotSaveAndCloseOnlyBuffer call AaronCloseIfOnlyErrorBuffer()
 
 
 " Open the error-messages window and go to the error message associated
 " with the current line.
-function! aaron:pop_current_error()
+function! AaronPop_current_error()
   let cur_file_name = expand("%")
   let cur_line_no = line(".")
   execute "lopen"
@@ -169,10 +169,10 @@ function! aaron:pop_current_error()
   " Register an entry hook such that if this is the only visible buffer, close vim.
   au BufEnter <buffer> DoNotSaveAndCloseOnlyBuffer
 endfunction
-command! -nargs=0 -bar PopCurError call aaron:pop_current_error()
+command! -nargs=0 -bar PopCurError call AaronPop_current_error()
 nnoremap <silent> <leader>e :PopCurError<CR>
 
-fun! aaron:StripTrailingWhitespaces()
+fun! AaronStripTrailingWhitespaces()
     let l = line(".")
     let c = col(".")
     let _s = @/
@@ -180,7 +180,7 @@ fun! aaron:StripTrailingWhitespaces()
     let @/ = _s
     call cursor(l, c)
 endfun
-command! -nargs=0 -bar Strip call aaron:StripTrailingWhitespaces()
+command! -nargs=0 -bar Strip call AaronStripTrailingWhitespaces()
 
 
 " Disable Eclim XML validation; we never have XSL files handy.
