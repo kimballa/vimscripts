@@ -47,7 +47,9 @@ au BufRead,BufNewFile *.scala set syntax=scala
 " for eclim
 set nocompatible
 filetype plugin on
-silent !maybe-start-eclimd&
+" (aaron) 2020 -- disable Eclim for now.
+let g:EclimDisabled = 1
+"silent !maybe-start-eclimd&
 
 " Use first level of the package name for grouping in Eclim imports
 let g:EclimJavaImportPackageSeparationLevel = 1
