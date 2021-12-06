@@ -13,6 +13,10 @@ set textwidth=100
 "set listchars=tab:»·,trail:·
 set title
 
+set visualbell
+set t_vb=
+set mouse=a
+
 " Searches: highlight matches, and be case insensitive;
 " unless they contain at least one capital letter.
 set hlsearch
@@ -72,7 +76,7 @@ let fullTagList = strlen(curGitRoot) ? curGitRoot . "/tags\\ " .
 " 'set tags' will tokenize the spaces properly only if we use 'set'.
 " Simply doing 'let &tags=...' won't properly pick up multiple tags
 " files.
-execute "set tags=" . fullTagList
+"execute "set tags=" . fullTagList
 
 " For the supertab program, use context completion
 let g:SuperTabDefaultCompletionType = "context"
